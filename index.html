@@ -1,134 +1,83 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
-<title>충남고등학교 졸업50주년 초대장</title>
-<meta name="description" content="고교졸업 50주년 초대장(모바일용)"/>
-<style>
-:root{
---bg:#fafafa;
---accent:#222;
---primary:#0055aa;
-}
-html,body{height:100%;margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans KR',sans-serif;background:var(--bg);color:var(--accent)}
-.app{height:100vh;display:flex;flex-direction:column;align-items:stretch}
-.viewer{flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#fff}
-.slide{min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;transition:transform .5s ease}
-.slides{display:flex;height:100%;transform:translateX(0%)}
-img.page{max-width:100%;max-height:100%;object-fit:contain;display:block}
-
-
-.topbar{position:absolute;left:0;right:0;top:0;height:56px;display:flex;align-items:center;justify-content:space-between;padding:8px 12px;backdrop-filter:blur(6px);background:linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.15));color:#fff}
-.title{font-weight:700;letter-spacing:1px}
-.controls{display:flex;gap:8px}
-.btn{background:var(--primary);border:0;padding:8px 14px;border-radius:10px;color:#fff;font-size:14px;cursor:pointer}
-
-
-.pager{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;padding:6px 10px;border-radius:18px;background:rgba(0,0,0,.4);font-size:14px;color:#fff}
-
-
-.sheet{position:relative;padding:12px;display:flex;gap:8px;align-items:center;justify-content:center;background:#f0f0f0}
-
-
-@media (min-width:700px){.viewer{max-width:700px;margin:0 auto;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.2);overflow:hidden}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport"content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>충남고등학교 졸업50주년기념 초대장</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+    .slider {
+      display: flex;
+      width: 400%;
+      height: 100%;
+      transition: transform 0.3s ease;
+    }
+    .slide {
+      flex: 1 0 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      touch-action: none; /* 확대/드래그 시 터치 충돌 방지 */
+    }
+  </style>
 </head>
 <body>
-<div class="app">
-<div class="viewer" id="viewer">
-<div class="topbar">
-<div class="title">🎓충남고등학교 졸업50주년 초대장</div>
-<div class="controls">
-<button id="shareBtn" class="btn">공유</button>
-<button id="downloadBtn" class="btn">다운로드</button>
-</div>
-</div>
+  <!-- 배경음악 (자동재생) -->
+  <audio id="bgm"src="music.mp3"autoplay loop muted></audio>
 
+  <div class="slider"id="slider">
+    <div class="slide"><img src="page1.jpg"alt="초대장 1"></div>
+    <div class="slide"><img src="page2.jpg"alt="초대장 2"></div>
+    <div class="slide"><img src="page3.jpg"alt="초대장 3"></div>
+    <div class="slide"><img src="page4.jpg"alt="초대장 4"></div>
+  </div>
 
-<div id="slides" class="slides" aria-live="polite">
-<div class="slide"><img class="page" src="page1.jpg" alt="초대장1" loading="lazy"></div>
-<div class="slide"><img class="page" src="page2.jpg" alt="초대장2" loading="lazy"></div>
-<div class="slide"><img class="page" src="page3.jpg" alt="초대장3" loading="lazy"></div>
-<div class="slide"><img class="page" src="page4.jpg" alt="초대장4" loading="lazy"></div>
-</div>
+  <script>
+    const slider = document.getElementById('slider');
+    let startX = 0;
+    let currentTranslate = 0;
+    let currentIndex = 0;
+    const totalSlides = 4;
 
+    // 슬라이드 스와이프
+    slider.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+    });
 
-<div id="pager" class="pager">1 / 4</div>
-<audio id="bgm" src="bgm.mp3" loop></audio>
-</div>
+    slider.addEventListener('touchend', e => {
+      const endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50 && currentIndex < totalSlides - 1) {
+        currentIndex++;
+      } else if (endX - startX > 50 && currentIndex > 0) {
+        currentIndex--;
+      }
+      updateSlider();
+    });
 
+    function updateSlider() {
+      currentTranslate = -currentIndex * 100;
+      slider.style.transform = `translateX(${currentTranslate}%)`;
+    }
 
-<div class="sheet">
-<button id="prev" class="btn">◀ 이전</button>
-<button id="rsvp" class="btn">참석 회신</button>
-<button id="next" class="btn">다음 ▶</button>
-</div>
-</div>
-
-
-<script>
-const slidesEl = document.getElementById('slides');
-const pagerEl = document.getElementById('pager');
-const total = slidesEl.children.length;
-let idx = 0;
-let autoSlide;
-
-
-function update(){
-slidesEl.style.transform = `translateX(${-idx*100}%)`;
-pagerEl.textContent = `${idx+1} / ${total}`;
-}
-
-
-function nextSlide(){ idx = (idx+1) % total; update(); }
-
-
-document.getElementById('next').addEventListener('click',()=>{ nextSlide(); });
-document.getElementById('prev').addEventListener('click',()=>{ idx = (idx-1+total)%total; update(); });
-
-
-let startX = 0, deltaX = 0, dragging = false;
-const viewer = document.getElementById('viewer');
-viewer.addEventListener('touchstart', e => { startX = e.touches[0].clientX; dragging = true; });
-viewer.addEventListener('touchmove', e => { if(!dragging) return; deltaX = e.touches[0].clientX - startX; slidesEl.style.transition='none'; slidesEl.style.transform = `translateX(${ -idx*100 + (deltaX / viewer.clientWidth) * 100 }%)`; });
-viewer.addEventListener('touchend', e => { dragging = false; slidesEl.style.transition='transform .5s ease'; if (Math.abs(deltaX) > 40){ if(deltaX<0) nextSlide(); else { idx = (idx-1+total)%total; update(); } } else update(); deltaX = 0; });
-
-
-window.addEventListener('keydown', e => { if(e.key==='ArrowRight') nextSlide(); if(e.key==='ArrowLeft'){ idx = (idx-1+total)%total; update(); } });
-
-
-document.getElementById('shareBtn').addEventListener('click', async ()=>{
-const shareData = {title: '충남고등학교 졸업50주년 초대장', text:'초대드립니다', url: location.href };
-try{ if(navigator.share){ await navigator.share(shareData); } else { prompt('이 주소를 복사해 전송하세요', location.href); } }
-catch(err){ console.log(err); prompt('이 주소를 복사해 전송하세요', location.href); }
-});
-
-
-document.getElementById('downloadBtn').addEventListener('click', ()=>{
-for(let i=1;i<=total;i++){ window.open(`page${i}.jpg`, '_blank'); }
-});
-
-
-// RSVP를 구글폼으로 연결
-const RSVP_FORM_URL = 'https://forms.gle/your-form-id'; // <-- 실제 구글폼 링크로 변경
-document.getElementById('rsvp').addEventListener('click', ()=>{
-window.open(RSVP_FORM_URL, '_blank');
-});
-
-
-function startAutoSlide(){
-autoSlide = setInterval(()=>{ nextSlide(); }, 5000); // 5초마다 자동
-}
-
-
-// 배경음악 자동 재생 (모바일은 첫 터치 이후 가능)
-const bgm = document.getElementById('Stone.mp3');
-viewer.addEventListener('click', ()=>{ if(bgm.paused){ bgm.play(); }});
-
-
-update();
-startAutoSlide();
-</script>
+    // 모바일 호환: 첫 터치 시 볼륨 활성화
+    const bgm = document.getElementById('bgm');
+    document.body.addEventListener('touchstart', () => {
+      if (bgm.muted) {
+        bgm.muted = false;
+        bgm.volume = 1.0;
+      }
+    }, { once: true });
+  </script>
 </body>
 </html>
