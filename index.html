@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>충남고등학교 제13회&#10;졸업50주년기념 초대장</title>
+  <title>충남고등학교 제13회 졸업50주년기념 초대장</title>
   <style>
     body, html {
       margin: 0;
@@ -33,7 +33,7 @@
       max-height: 100%;
       object-fit: contain;
       transform-origin: center center;
-      /*transition: transform 0.1s ease;*/
+      /* transition 제거해야 확대 상태가 유지됨 */
     }
   </style>
 </head>
@@ -77,7 +77,7 @@
 
     function updateSlider() {
       slider.style.transform = `translateX(${-currentIndex * 100}%)`;
-     // resetZoom(); // 슬라이드 넘기면 확대 상태 초기화
+      resetZoom(); // 슬라이드 넘기면 확대 상태 초기화
     }
 
     // -------------------------------
@@ -86,7 +86,6 @@
     let scale = 1;
     let initialDistance = null;
     const slides = document.querySelectorAll('.slide img');
-    //let currentIndex = 0; 슬라이더에서 현재 인데스관리
 
     slider.addEventListener('touchmove', e => {
       if (e.touches.length === 2) {
@@ -102,7 +101,7 @@
           if (newScale < 1) newScale = 1;   // 최소 1배
           if (newScale > 4) newScale = 4;   // 최대 4배
           slides[currentIndex].style.transform = `scale(${newScale})`;
-		  slides[currentIndex].dataset.tempScale = newScale;//임시저장
+          slides[currentIndex].dataset.tempScale = newScale; // 현재 스케일 저장
         }
       }
     });
@@ -110,9 +109,10 @@
     slider.addEventListener('touchend', e => {
       if (e.touches.length < 2 && initialDistance) {
         const img = slides[currentIndex];
-		if (img.dataset.tempScale) {
-		  scale = parseFloat(img.dataset.tempScale);
-		}  
+        if (img.dataset.tempScale) {
+          scale = parseFloat(img.dataset.tempScale);
+          img.style.transform = `scale(${scale})`; // 손 떼어도 마지막 크기 유지
+        }
         initialDistance = null;
       }
     });
@@ -121,20 +121,18 @@
       scale = 1;
       initialDistance = null;
       slides[currentIndex].style.transform = `scale(1)`;
-	  slides[currentIndex].dataset.tempScale = 1;
+      slides[currentIndex].dataset.tempScale = 1;
     }
 
     // -------------------------------
     // 모바일 첫 터치 시 음소거 해제, 초기 볼륨 낮게
     // -------------------------------
     const bgm = document.getElementById('bgm');
-    bgm.volume = 0.2;	
     document.body.addEventListener('touchstart', () => {
       if (bgm.muted) {
         bgm.muted = false;
-		bgm.volume = 0.2;
+        bgm.volume = 0.2; // 첫 시작은 작은 볼륨
       }
-	  else bgm.volume = 0.2;
     }, { once: true });
   </script>
 </body>
