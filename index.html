@@ -33,7 +33,7 @@
       max-height: 100%;
       object-fit: contain;
       transform-origin: center center;
-      transition: transform 0.1s ease;
+      /*transition: transform 0.1s ease;*/
     }
   </style>
 </head>
@@ -86,7 +86,7 @@
     let scale = 1;
     let initialDistance = null;
     const slides = document.querySelectorAll('.slide img');
-    //let currentIndex = 0; //슬라이더에서 현재 인데스관리
+    //let currentIndex = 0; 슬라이더에서 현재 인데스관리
 
     slider.addEventListener('touchmove', e => {
       if (e.touches.length === 2) {
