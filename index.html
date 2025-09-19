@@ -107,7 +107,8 @@
     });
 
     slider.addEventListener('touchend', e => {
-      if (e.touches.length < 2 && initialDistance) {
+    //  if (e.touches.length < 2 && initialDistance) {
+	  if (e.touches.length == 2 && initialDistance) {
         const img = slides[currentIndex];
         if (img.dataset.tempScale) {
           scale = parseFloat(img.dataset.tempScale);
