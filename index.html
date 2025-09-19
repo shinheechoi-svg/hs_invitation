@@ -129,13 +129,14 @@
     // -------------------------------
     const bgm = document.getElementById('bgm');
     bgm.volume = 0.2;	
-    document.body.addEventListener('touchstart', () => {
-      if (bgm.muted) {
-        bgm.muted = false;
-		bgm.volume = 0.2;
-      }
-	  else bgm.volume = 0.2;
-    }, { once: true });
+    //document.body.addEventListener('touchstart', () => {
+    //  if (bgm.muted) {
+    //    bgm.muted = false;
+	//	bgm.volume = 0.2;
+    //  }
+	//  else bgm.volume = 0.2;
+    //}, 
+	{ once: true });
   </script>
 </body>
 </html>
