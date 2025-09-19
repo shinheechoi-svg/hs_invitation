@@ -102,6 +102,7 @@
           if (newScale < 1) newScale = 1;   // 최소 1배
           if (newScale > 4) newScale = 4;   // 최대 4배
           slides[currentIndex].style.transform = `scale(${newScale})`;
+		  slides[currentIndex].dataset.tempScale = newScale;//임시저장
         }
       }
     });
@@ -109,9 +110,9 @@
     slider.addEventListener('touchend', e => {
       if (e.touches.length < 2 && initialDistance) {
         const img = slides[currentIndex];
-        const transform = img.style.transform;
-        const match = transform.match(/scale\(([^)]+)\)/);
-        if (match) scale = parseFloat(match[1]);
+		if (img.dataset.tempScale) {
+		  scale = parseFloat(img.dataset.tempScale);
+		}  
         initialDistance = null;
       }
     });
@@ -120,16 +121,17 @@
       scale = 1;
       initialDistance = null;
       slides[currentIndex].style.transform = `scale(1)`;
+	  slides[currentIndex].dataset.tempScale = 1;
     }
 
     // -------------------------------
     // 모바일 첫 터치 시 음소거 해제, 초기 볼륨 낮게
     // -------------------------------
-    const bgm = document.getElementById('bgm');
-	bgm.volume = 0.2;
+    const bgm = document.getElementById('bgm');	
     document.body.addEventListener('touchstart', () => {
       if (bgm.muted) {
         bgm.muted = false;
+		bgm.volume = 0.2;
       }
     }, { once: true });
   </script>
