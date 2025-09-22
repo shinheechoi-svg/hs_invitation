@@ -31,6 +31,7 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            /* height: 100% 제거 */
         }
         .slide img {
             width: 100%;
@@ -102,7 +103,7 @@
         document.body.addEventListener('touchstart', () => {
             if (bgm.paused) {
                 bgm.muted = false;
-                bgm.volume = 0.2;
+                bgm.volume = 1.0;
                 bgm.play().catch(err => {
                     console.log("모바일 자동재생 차단:", err);
                 });
