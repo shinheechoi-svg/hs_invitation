@@ -20,10 +20,10 @@
         }
         .slider {
             display: flex;
-            width: 400%;
+            width: 400%; /* 4장 이미지니까 400% */
             height: 100vh;
-            touch-action: pan-y;
-            transition: transform 0.3s ease-out;
+            touch-action: pan-y; /* 핀치줌 허용 */
+            transition: transform 0.3s ease-out; /* 부드러운 전환 효과 추가 */
         }
         .slide {
             flex: 0 0 100%;
@@ -31,14 +31,13 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            /* This is the key change: ensure the slide's height is defined */
-            height: 100vh; 
+            height: 100vh;
         }
         .slide img {
             width: 100%;
             height: 100%;
             object-fit: contain;
-            user-select: none;
+            user-select: none; /* 드래그 방지 */
             -webkit-user-drag: none;
         }
     </style>
@@ -62,6 +61,7 @@
         let currentIndex = 0;
         const totalSlides = 4;
         const bgm = document.getElementById('bgm');
+        let hasInteracted = false;
 
         // 슬라이드 스와이프 로직
         slider.addEventListener('touchstart', e => {
@@ -99,17 +99,28 @@
         function updateSlider() {
             slider.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
-        
+
         // 배경음악 자동재생
-        document.body.addEventListener('touchstart', () => {
-            if (bgm.paused) {
+        // The play() method returns a Promise, so we can handle potential errors
+        document.body.addEventListener('touchstart', playBGM, { once: true });
+        
+        function playBGM() {
+            if (!hasInteracted) {
                 bgm.muted = false;
-                bgm.volume = 0.2;
-                bgm.play().catch(err => {
-                    console.log("모바일 자동재생 차단:", err);
-                });
+                bgm.volume = 1.0;
+                const playPromise = bgm.play();
+
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        console.log("Audio playback started successfully.");
+                        hasInteracted = true;
+                    })
+                    .catch(error => {
+                        console.log("Audio playback was prevented. Autoplay is not allowed.", error);
+                    });
+                }
             }
-        }, { once: true });
+        }
     </script>
 </body>
-</html
+</html>
