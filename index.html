@@ -4,121 +4,138 @@
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>충남고등학교 제13회&#10;졸업50주년기념 초대장</title>
+  <title>충남고등학교 제13회 졸업50주년기념 초대장</title>
   <style>
-    body {
+    body, html {
       margin: 0;
-      background: black;
+      padding: 0;
+      height: 100%;
+      background: #000;
       overflow: hidden;
+      touch-action: none; /* 우리가 직접 제어 */
     }
     .slider {
       display: flex;
-      width: 400%; /* 이미지 4장 → 100% * 4 */
-      height: 100vh;
-      transition: transform 0.3s ease;
-      touch-action: none; /* 제스처 직접 처리 */
+      flex-wrap: nowrap;
+      height: 100%;
+      //transition: transform 0.3s ease;
     }
     .slide {
       flex: 0 0 100%;
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
+      background: #000;
       overflow: hidden;
     }
     .slide img {
       max-width: 100%;
       max-height: 100%;
+      object-fit: contain;
       transform-origin: center center;
-      transition: transform 0.05s ease-out;
+      /* transition 제거해야 확대 상태가 유지됨 */
     }
   </style>
 </head>
 <body>
+  <!-- 배경음악 (자동재생) -->
+  <audio id="bgm" src="music.mp3" autoplay loop muted></audio>
+
   <div class="slider" id="slider">
-    <div class="slide"><img src="img1.jpg" alt="이미지1"></div>
-    <div class="slide"><img src="img2.jpg" alt="이미지2"></div>
-    <div class="slide"><img src="img3.jpg" alt="이미지3"></div>
-    <div class="slide"><img src="img4.jpg" alt="이미지4"></div>
+    <div class="slide"><img src="page1.jpg" alt="초대장 1"></div>
+    <div class="slide"><img src="page2.jpg" alt="초대장 2"></div>
+    <div class="slide"><img src="page3.jpg" alt="초대장 3"></div>
+    <div class="slide"><img src="page4.jpg" alt="초대장 4"></div>
   </div>
 
-  <audio id="bgm" autoplay loop playsinline>
-    <source src="music.mp3" type="audio/mpeg">
-  </audio>
-
   <script>
-    // --- 배경음악 ---
-    const bgm = document.getElementById("bgm");
-    bgm.volume = 0.2; // 처음에는 작은 소리로 시작
-
-    // --- 슬라이드 ---
-    const slider = document.getElementById("slider");
-    const slides = slider.querySelectorAll(".slide img");
-    let currentIndex = 0;
+    const slider = document.getElementById('slider');
     let startX = 0;
-    let currentX = 0;
-    let isDragging = false;
+    let currentIndex = 0;
+    const totalSlides = 4;
 
-    slider.addEventListener("touchstart", (e) => {
+    // -------------------------------
+    // 슬라이드 스와이프
+    // -------------------------------
+    slider.addEventListener('touchstart', e => {
       if (e.touches.length === 1) {
-        isDragging = true;
         startX = e.touches[0].clientX;
       }
     });
 
-    slider.addEventListener("touchmove", (e) => {
-      if (isDragging && e.touches.length === 1) {
-        currentX = e.touches[0].clientX;
+    slider.addEventListener('touchend', e => {
+      if (e.changedTouches.length === 1) {
+        const endX = e.changedTouches[0].clientX;
+        if (startX - endX > 50 && currentIndex < totalSlides - 1) {
+          currentIndex++;
+        } else if (endX - startX > 50 && currentIndex > 0) {
+          currentIndex--;
+        }
+        updateSlider();
       }
     });
 
-    slider.addEventListener("touchend", () => {
-      if (!isDragging) return;
-      let diff = currentX - startX;
-      if (diff > 50 && currentIndex > 0) {
-        currentIndex--;
-      } else if (diff < -50 && currentIndex < slides.length - 1) {
-        currentIndex++;
-      }
-      slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-      isDragging = false;
-    });
-
-    // --- 핀치 줌 ---
-    let scale = 1;
-    let lastDistance = 0;
-
-    function getDistance(touches) {
-      const dx = touches[0].clientX - touches[1].clientX;
-      const dy = touches[0].clientY - touches[1].clientY;
-      return Math.sqrt(dx*dx + dy*dy);
+    function updateSlider() {
+      slider.style.transform = `translateX(${-currentIndex * 100}%)`;
+      //resetZoom(); // 슬라이드 넘기면 확대 상태 초기화
     }
 
-    slides.forEach(img => {
-      img.addEventListener("touchstart", (e) => {
-        if (e.touches.length === 2) {
-          lastDistance = getDistance(e.touches);
-        }
-      }, { passive: false });
+    // -------------------------------
+    // 핀치줌 (두 손가락)
+    // -------------------------------
+    let scale = 1;
+    let initialDistance = null;
+    const slides = document.querySelectorAll('.slide img');
 
-      img.addEventListener("touchmove", (e) => {
-        if (e.touches.length === 2) {
-          e.preventDefault();
-          const newDistance = getDistance(e.touches);
-          const delta = newDistance / lastDistance;
-          scale *= delta;
-          scale = Math.max(1, Math.min(scale, 5)); // 최소1배 ~ 최대5배
-          img.style.transform = `scale(${scale})`;
-          lastDistance = newDistance;
-        }
-      }, { passive: false });
+    slider.addEventListener('touchmove', e => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - e.touches[1].clientX;
+        const dy = e.touches[0].clientY - e.touches[1].clientY;
+        const distance = Math.sqrt(dx*dx + dy*dy);
 
-      img.addEventListener("touchend", () => {
-        if (scale < 1.05) { // 손 뗄 때 거의 원래 크기면 초기화
-          scale = 1;
-          img.style.transform = "scale(1)";
+
+        if (!initialDistance) {
+          initialDistance = distance;
+        } else {
+          let newScale = (distance / initialDistance) * scale;
+          if (newScale < 1) newScale = 1;   // 최소 1배
+          if (newScale > 4) newScale = 4;   // 최대 4배
+          slides[currentIndex].style.transform = `scale(${newScale})`;
+          slides[currentIndex].dataset.tempScale = newScale; // 현재 스케일 저장
         }
-      });
+      }
     });
+
+    slider.addEventListener('touchend', e => {
+      if (e.touches.length < 2 && initialDistance) {
+	//  if (e.touches.length == 2 && initialDistance) {
+        const img = slides[currentIndex];
+        if (img.dataset.tempScale) {
+          scale = parseFloat(img.dataset.tempScale);
+          img.style.transform = `scale(${scale})`; // 손 떼어도 마지막 크기 유지
+        }
+        initialDistance = null;
+      }
+    });
+
+    function resetZoom() {
+      scale = 1;
+      initialDistance = null;
+      slides[currentIndex].style.transform = `scale(1)`;
+      slides[currentIndex].dataset.tempScale = 1;
+    }
+
+    // -------------------------------
+    // 모바일 첫 터치 시 음소거 해제, 초기 볼륨 낮게
+    // -------------------------------
+    const bgm = document.getElementById('bgm');
+    document.body.addEventListener('touchstart', () => {
+      if (bgm.muted) {
+        bgm.muted = false;
+        bgm.volume = 0.2; // 첫 시작은 작은 볼륨
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
