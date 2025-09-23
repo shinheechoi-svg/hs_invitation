@@ -3,28 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>충남고등학교 제13회&#10;졸업50주년기념 초대장</title>
+<title>졸업 50주년 기념 초대장</title>
 
 <script>
-// 자동 버전 생성: 현재 시간 기반
+// OG 쿼리스트링 자동 생성
+// 매번 페이지 열 때 timestamp 기반 → 캐시 회피
 const version = new Date().getTime();
 
-// OG 태그 동적 생성 (캐시 방지)
+// OG 태그 동적 생성
+const ogTitle = "고교 졸업 50주년 초대장";
+const ogDescription = "졸업 50주년 기념 행사에 초대합니다.";
+const ogImage = `page1.jpg?v=${version}`;
+const ogURL = `${window.location.href.split('?')[0]}?v=${version}`;
+
+// document.write는 DOM 로드 전 사용
 document.write(`
-<meta property="og:title" content="고교 졸업 50주년 초대장">
-<meta property="og:description" content="졸업 50주년 기념 행사에 초대합니다.">
-<meta property="og:image" content="page1.jpg?v=${version}">
-<meta property="og:url" content="https://yourgithub.io/invite?v=${version}">
+<meta property="og:title" content="${ogTitle}">
+<meta property="og:description" content="${ogDescription}">
+<meta property="og:image" content="${ogImage}">
+<meta property="og:url" content="${ogURL}">
 `);
 </script>
 
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 
 <style>
-body, html { margin: 0; padding: 0; height: 100%; background: #000; }
-.swiper { width: 100%; height: 100%; }
-.swiper-slide { display: flex; align-items: center; justify-content: center; background: #000; }
-.swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
+body, html { margin:0; padding:0; height:100%; background:#000; }
+.swiper { width:100%; height:100%; }
+.swiper-slide { display:flex; align-items:center; justify-content:center; background:#000; }
+.swiper-slide img { width:100%; height:100%; object-fit:contain; }
 </style>
 </head>
 <body>
@@ -51,7 +58,7 @@ const bgm = document.getElementById('bgm');
 let hasStarted = false;
 document.body.addEventListener('click', () => {
     if (!hasStarted) {
-        bgm.volume = 0.2; // 작게 시작
+        bgm.volume = 0.2;
         bgm.play().catch(err => console.log("재생 차단:", err));
         hasStarted = true;
     }
