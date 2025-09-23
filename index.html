@@ -34,6 +34,8 @@
   </style>
 </head>
 <body>
+  <!-- 배경음악 -->
+  <audio id="bgm" src="music.mp3" loop></audio>
   <!-- Swiper -->
   <div class="swiper">
     <div class="swiper-wrapper">
@@ -60,5 +62,18 @@
       },
     });
   </script>
+  <script>
+  const bgm = document.getElementById('bgm');
+  let hasStarted = false;
+
+  // 첫 터치 시 재생 (작은 볼륨으로 시작)
+  document.body.addEventListener('click', () => {
+    if (!hasStarted) {
+      bgm.volume = 0.2; // 작게 시작
+      bgm.play().catch(err => console.log("재생 차단:", err));
+      hasStarted = true;
+    }
+  }, { once: true });
+</script>
 </body>
 </html>
