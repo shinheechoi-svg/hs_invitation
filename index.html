@@ -41,22 +41,22 @@ body, html {
     <div class="swiper-wrapper">
         <div class="swiper-slide">
             <div class="swiper-zoom-container">
-                <img src="page1.jpg" alt="첫 번째 이미지">
+                <img src="img1.jpg" alt="첫 번째 이미지">
             </div>
         </div>
         <div class="swiper-slide">
             <div class="swiper-zoom-container">
-                <img src="page2.jpg" alt="두 번째 이미지">
+                <img src="img2.jpg" alt="두 번째 이미지">
             </div>
         </div>
         <div class="swiper-slide">
             <div class="swiper-zoom-container">
-                <img src="page3.jpg" alt="세 번째 이미지">
+                <img src="img3.jpg" alt="세 번째 이미지">
             </div>
         </div>
         <div class="swiper-slide">
             <div class="swiper-zoom-container">
-                <img src="page4.jpg" alt="네 번째 이미지">
+                <img src="img4.jpg" alt="네 번째 이미지">
             </div>
         </div>
     </div>
@@ -77,17 +77,29 @@ document.body.addEventListener('click', () => {
     }
 }, { once: true });
 
-// Swiper 초기화 (가로 방향 간격 적용)
-const swiper = new Swiper('.swiper', {
+// 화면 폭 비율 기반 간격 계산
+function getSpaceBetween() {
+    // 화면 폭의 2% 정도를 간격으로 사용
+    return Math.floor(window.innerWidth * 0.02);
+}
+
+// Swiper 초기화
+let swiper = new Swiper('.swiper', {
     direction: 'horizontal',
-    slidesPerView: 1,          // 한 화면에 한 장
-    spaceBetween: 10,           // 가로 방향 간격: 화면 폭 기준 약간
-    loop: false,               // 끝에서 멈춤
-    zoom: true,                // 확대/축소 가능
+    slidesPerView: 1,
+    spaceBetween: getSpaceBetween(), // 화면 비율 기반
+    loop: false,
+    zoom: true,
     pagination: {
         el: '.swiper-pagination',
         clickable: true,
     },
+});
+
+// 화면 회전 등 resize 시 간격 갱신
+window.addEventListener('resize', () => {
+    swiper.params.spaceBetween = getSpaceBetween();
+    swiper.update();
 });
 </script>
 
