@@ -20,10 +20,10 @@
         }
         .slider {
             display: flex;
-            width: 400%; /* 4장 이미지니까 400% */
+            width: 400%; /* 슬라이드 4장 → 400% */
             height: 100vh;
-            touch-action: pan-y; /* 핀치줌 허용 */
-            transition: transform 0.3s ease-out; /* 부드러운 전환 효과 추가 */
+            touch-action: pan-y;
+            transition: transform 0.3s ease-out;
         }
         .slide {
             flex: 0 0 100%;
@@ -36,9 +36,10 @@
         .slide img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
-            user-select: none; /* 드래그 방지 */
+            object-fit: contain; /* 비율 유지 */
+            user-select: none;   /* 드래그 방지 */
             -webkit-user-drag: none;
+            background: #000;
         }
     </style>
 </head>
@@ -56,14 +57,28 @@
 
     <script>
         const slider = document.getElementById('slider');
+        const bgm = document.getElementById('bgm');
+
         let startX = 0;
         let isSwiping = false;
         let currentIndex = 0;
         const totalSlides = 4;
-        const bgm = document.getElementById('bgm');
+        let slideWidth = window.innerWidth; // 현재 화면 너비(px)
         let hasInteracted = false;
 
-        // 슬라이드 스와이프 로직
+        // 슬라이드 위치 업데이트
+        function updateSlider() {
+            slider.style.transition = 'transform 0.3s ease-out';
+            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        }
+
+        // 창 크기 변경 시 슬라이드 폭 갱신
+        window.addEventListener('resize', () => {
+            slideWidth = window.innerWidth;
+            updateSlider();
+        });
+
+        // 터치 시작
         slider.addEventListener('touchstart', e => {
             if (e.touches.length > 1) {
                 isSwiping = false;
@@ -74,13 +89,16 @@
             slider.style.transition = 'none';
         });
 
+        // 터치 이동
         slider.addEventListener('touchmove', e => {
             if (!isSwiping) return;
             const currentX = e.touches[0].clientX;
             const diff = currentX - startX;
-            slider.style.transform = `translateX(${diff - currentIndex * 100}%)`;
+            const offset = -currentIndex * slideWidth + diff;
+            slider.style.transform = `translateX(${offset}px)`;
         });
 
+        // 터치 종료
         slider.addEventListener('touchend', e => {
             if (!isSwiping) return;
             isSwiping = false;
@@ -93,15 +111,9 @@
                 currentIndex--;
             }
             updateSlider();
-            slider.style.transition = 'transform 0.3s ease-out';
         });
 
-        function updateSlider() {
-            slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-
         // 배경음악 자동재생
-        // The play() method returns a Promise, so we can handle potential errors
         document.body.addEventListener('touchstart', playBGM, { once: true });
         
         function playBGM() {
@@ -111,12 +123,11 @@
                 const playPromise = bgm.play();
 
                 if (playPromise !== undefined) {
-                    playPromise.then(_ => {
-                        console.log("Audio playback started successfully.");
+                    playPromise.then(() => {
                         hasInteracted = true;
-                    })
-                    .catch(error => {
-                        console.log("Audio playback was prevented. Autoplay is not allowed.", error);
+                        console.log("Audio playback started successfully.");
+                    }).catch(error => {
+                        console.log("Audio playback was prevented.", error);
                     });
                 }
             }
