@@ -3,32 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>충남고등학교 제13회&#10;졸업50주년기념 초대장</title>
+<title>졸업 50주년 기념 초대장</title>
+
+<script>
+// 자동 버전 생성: 현재 시간 기반
+const version = new Date().getTime();
+
+// OG 태그 동적 생성 (캐시 방지)
+document.write(`
+<meta property="og:title" content="고교 졸업 50주년 초대장">
+<meta property="og:description" content="졸업 50주년 기념 행사에 초대합니다.">
+<meta property="og:image" content="page1.jpg?v=${version}">
+<meta property="og:url" content="https://yourgithub.io/invite?v=${version}">
+`);
+</script>
 
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
 
 <style>
-body, html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    background: #000;
-}
-.swiper {
-    width: 100%;
-    height: 100%;
-}
-.swiper-slide {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-}
-.swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+body, html { margin: 0; padding: 0; height: 100%; background: #000; }
+.swiper { width: 100%; height: 100%; }
+.swiper-slide { display: flex; align-items: center; justify-content: center; background: #000; }
+.swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
 </style>
 </head>
 <body>
@@ -36,29 +32,13 @@ body, html {
 <!-- 배경음악 -->
 <audio id="bgm" src="music.mp3" loop></audio>
 
-<!-- Swiper -->
+<!-- Swiper 슬라이드 -->
 <div class="swiper">
     <div class="swiper-wrapper">
-        <div class="swiper-slide">
-            <div class="swiper-zoom-container">
-                <img src="page1.jpg" alt="첫 번째 이미지">
-            </div>
-        </div>
-        <div class="swiper-slide">
-            <div class="swiper-zoom-container">
-                <img src="page2.jpg" alt="두 번째 이미지">
-            </div>
-        </div>
-        <div class="swiper-slide">
-            <div class="swiper-zoom-container">
-                <img src="page3.jpg" alt="세 번째 이미지">
-            </div>
-        </div>
-        <div class="swiper-slide">
-            <div class="swiper-zoom-container">
-                <img src="page4.jpg" alt="네 번째 이미지">
-            </div>
-        </div>
+        <div class="swiper-slide"><div class="swiper-zoom-container"><img src="page1.jpg" alt="첫 번째 이미지"></div></div>
+        <div class="swiper-slide"><div class="swiper-zoom-container"><img src="page2.jpg" alt="두 번째 이미지"></div></div>
+        <div class="swiper-slide"><div class="swiper-zoom-container"><img src="page3.jpg" alt="세 번째 이미지"></div></div>
+        <div class="swiper-slide"><div class="swiper-zoom-container"><img src="page4.jpg" alt="네 번째 이미지"></div></div>
     </div>
     <div class="swiper-pagination"></div>
 </div>
@@ -71,32 +51,26 @@ const bgm = document.getElementById('bgm');
 let hasStarted = false;
 document.body.addEventListener('click', () => {
     if (!hasStarted) {
-        bgm.volume = 0.2;   // 작게 시작
+        bgm.volume = 0.2; // 작게 시작
         bgm.play().catch(err => console.log("재생 차단:", err));
         hasStarted = true;
     }
 }, { once: true });
 
-// 화면 폭 비율 기반 간격 계산
-function getSpaceBetween() {
-    // 화면 폭의 2% 정도를 간격으로 사용
-    return Math.floor(window.innerWidth * 0.02);
-}
+// 화면 비율 기반 간격
+function getSpaceBetween() { return Math.floor(window.innerWidth * 0.02); }
 
 // Swiper 초기화
 let swiper = new Swiper('.swiper', {
     direction: 'horizontal',
     slidesPerView: 1,
-    spaceBetween: getSpaceBetween(), // 화면 비율 기반
+    spaceBetween: getSpaceBetween(),
     loop: false,
     zoom: true,
-    pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-    },
+    pagination: { el: '.swiper-pagination', clickable: true },
 });
 
-// 화면 회전 등 resize 시 간격 갱신
+// 화면 회전/리사이즈 시 간격 갱신
 window.addEventListener('resize', () => {
     swiper.params.spaceBetween = getSpaceBetween();
     swiper.update();
