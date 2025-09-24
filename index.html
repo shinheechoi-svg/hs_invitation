@@ -60,17 +60,19 @@ body, html { margin:0; padding:0; height:100%; background:#000; }
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
 <script>
-// 배경음악 제어
+// 배경음악 제어: 첫 터치로 바로 재생
 const bgm = document.getElementById('bgm');
 const bgmBtn = document.getElementById('bgmBtn');
 let isPlaying = false;
 
 bgmBtn.addEventListener('click', () => {
     if (!isPlaying) {
+        bgm.load(); // 확실히 로드
         bgm.volume = 0.2;
-        bgm.play().catch(err => console.log("재생 차단:", err));
-        bgmBtn.textContent = '🔇'; // 아이콘 변경
-        isPlaying = true;
+        bgm.play().then(() => {
+            bgmBtn.textContent = '🔇'; // 아이콘 변경
+            isPlaying = true;
+        }).catch(err => console.log("재생 차단:", err));
     } else {
         bgm.pause();
         bgmBtn.textContent = '🔊';
