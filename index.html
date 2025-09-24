@@ -13,15 +13,15 @@ const version = new Date().getTime();
 // OG 태그 동적 생성
 const ogTitle = "충남고등학교 제13회&#10;졸업50주년기념 초대장";
 const ogDescription = "졸업50주년 기념행사에 초대합니다.";
-const ogImage = `some_nail.jpg?v=${version}`;
-const ogURL = `${window.location.href.split('?')[0]}?v=${version}`;
+//const ogImage = `some_nail.jpg?v=${version}`;
+//const ogURL = `${window.location.href.split('?')[0]}?v=${version}`;
 
 // document.write는 DOM 로드 전 사용
 document.write(`
 <meta property="og:title" content="${ogTitle}">
 <meta property="og:description" content="${ogDescription}">
-<meta property="og:image" content="${ogImage}">
-<meta property="og:url" content="${ogURL}">
+<meta property="og:image" content="https://github.com/shinheechoi-svg/hs_invitation/blob/main/some_nail.jpg">
+<meta property="og:url" content="https://github.com/shinheechoi-svg/hs_invitation/blob/main/">
 `);
 </script>
 
