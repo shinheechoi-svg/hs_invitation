@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>충남고등학교 제13회 졸업50주년기념 초대장</title>
 
-<!-- OG 메타태그 (정적, 캐시 회피용 쿼리스트링 포함) -->
+<!-- OG 메타태그 -->
 <meta property="og:title" content="충남고등학교 제13회 졸업50주년기념 초대장">
 <meta property="og:description" content="졸업50주년 기념행사에 초대합니다.">
 <meta property="og:image" content="https://raw.githubusercontent.com/shinheechoi-svg/hs_invitation/main/page0.jpg?v=20250925">
@@ -41,10 +41,10 @@ body, html { margin:0; padding:0; height:100%; background:#000; }
 <body>
 
 <!-- 배경음악 -->
-<audio id="bgm" src="music.mp3" loop></audio>
+<audio id="bgm" src="music.mp3" loop preload="auto"></audio>
 
 <!-- 배경음악 제어 버튼 -->
-<button id="bgmBtn">🔊</button>
+<button id="bgmBtn">🔇</button>
 
 <!-- Swiper 슬라이드 -->
 <div class="swiper">
@@ -60,22 +60,21 @@ body, html { margin:0; padding:0; height:100%; background:#000; }
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
 <script>
-// 배경음악 제어: 첫 터치로 바로 재생
+// 배경음악 제어
 const bgm = document.getElementById('bgm');
 const bgmBtn = document.getElementById('bgmBtn');
 let isPlaying = false;
 
 bgmBtn.addEventListener('click', () => {
     if (!isPlaying) {
-        bgm.load(); // 확실히 로드
         bgm.volume = 0.2;
         bgm.play().then(() => {
-            bgmBtn.textContent = '🔇'; // 아이콘 변경
+            bgmBtn.textContent = '🔊';
             isPlaying = true;
         }).catch(err => console.log("재생 차단:", err));
     } else {
         bgm.pause();
-        bgmBtn.textContent = '🔊';
+        bgmBtn.textContent = '🔇';
         isPlaying = false;
     }
 });
