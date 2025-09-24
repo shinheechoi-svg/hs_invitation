@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>충남고등학교 제13회 졸업50주년기념 초대장</title>
 
-<!-- OG 메타태그 (정적으로 선언해야 카카오톡에서 읽힘) -->
+<!-- OG 메타태그 (정적, 캐시 회피용 쿼리스트링 포함) -->
 <meta property="og:title" content="충남고등학교 제13회 졸업50주년기념 초대장">
 <meta property="og:description" content="졸업50주년 기념행사에 초대합니다.">
-<meta property="og:image" content="https://raw.githubusercontent.com/shinheechoi-svg/hs_invitation/main/some_nail.jpg?v=20250924">
+<meta property="og:image" content="https://raw.githubusercontent.com/shinheechoi-svg/hs_invitation/main/page0.jpg?v=20250925">
 <meta property="og:url" content="https://shinheechoi-svg.github.io/hs_invitation/">
 
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
@@ -72,3 +72,13 @@ window.addEventListener('resize', () => {
 
 </body>
 </html>
+🔹 적용 후 확인 순서
+HTML 파일을 깃허브에 올립니다. (index.html)
+
+page0.jpg 파일도 같은 저장소에 업로드
+
+브라우저에서 https://shinheechoi-svg.github.io/hs_invitation/ 접속 → 페이지 소스 확인
+
+카카오톡 공유 디버거 → URL 입력 → 스크랩하기 → 캐시 초기화
+
+이대로 진행하면 카카오톡 미리보기 썸네일이 page0.jpg로 정상 변경됩니다.
